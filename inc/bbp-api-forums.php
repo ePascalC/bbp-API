@@ -1,0 +1,2 @@
+<?php
+/* code for forums */
