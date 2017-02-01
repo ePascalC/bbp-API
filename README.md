@@ -5,5 +5,7 @@ For WP 4.7 and higher: No extra plugins needed, the bbp-API can be installed and
 
 bbPress 2.6 will be the target version, but let's see what can be done for 2.5 too.
 
+Code is currently updated on https://wordpress.org/plugins/bbp-api/
+
 
 Use in development environments only.
