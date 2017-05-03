@@ -37,8 +37,14 @@ add_action( 'rest_api_init', function () {
 		'callback' => 'bbp_api_forums',
 	) );
 	register_rest_route( 'bbp-api/v1', '/forums/(?P<id>\d+)', array(
-		'methods' => 'GET',
+		array(
+		'methods' => WP_REST_Server::READABLE,
 		'callback' => 'bbp_api_forums_one',
+		),
+		array(
+			'methods' => WP_REST_Server::CREATABLE,
+			'callback' => 'bbp_api_forums_post',
+		),
 	) );
 	register_rest_route( 'bbp-api/v1', '/topics/', array(
 		'methods' => 'GET',
@@ -59,8 +65,14 @@ add_action( 'rest_api_init', function () {
 		'callback' => 'bbp_api_replies',
 	) );
 	register_rest_route( 'bbp-api/v1', '/replies/(?P<id>\d+)', array(
-		'methods' => 'GET',
-		'callback' => 'bbp_api_replies_one',
+		array(
+			'methods' => WP_REST_Server::READABLE,
+			'callback' => 'bbp_api_replies_one',
+		),
+		array(
+			'methods' => WP_REST_Server::CREATABLE,
+			'callback' => 'bbp_api_replies_post',
+		),
 	) );
 	register_rest_route( 'bbp-api/v1', '/topic-tags/', array(
 		'methods' => 'GET',
