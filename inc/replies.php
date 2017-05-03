@@ -52,14 +52,15 @@ function bbp_api_replies_post($data) {
 	//required fields in POST data
 	$all_reply_data = bbp_api_replies_info($data['id']);
 	$all_reply_data['content'] = $data['content'];
-	$myuser = get_user_by("email", $data['email']);
+	$all_reply_data['email'] = $data['email'];
 
 	$reply_fields = array("content", "email");
-	$filter_check = bbp_api_filter_input($reply_fields, $all_topic_data);
+	$filter_check = bbp_api_filter_input($reply_fields, $all_reply_data);
 	if (!empty($filter_check)) {
 		return $filter_check;
 	}
-
+	
+	$myuser = get_user_by("email", $data['email']);
 	$reply_id = bbp_insert_reply(
     array(
       'post_parent'  => $all_reply_data['topic_id'],
