@@ -45,8 +45,14 @@ add_action( 'rest_api_init', function () {
 		'callback' => 'bbp_api_topics',
 	) );
 	register_rest_route( 'bbp-api/v1', '/topics/(?P<id>\d+)', array(
-		'methods' => 'GET',
-		'callback' => 'bbp_api_topics_one',
+		array(
+			'methods' => WP_REST_Server::READABLE,
+			'callback' => 'bbp_api_topics_one',
+		),
+		array(
+			'methods' => WP_REST_Server::CREATABLE,
+			'callback' => 'bbp_api_topics_post',
+		),
 	) );
 	register_rest_route( 'bbp-api/v1', '/replies/', array(
 		'methods' => 'GET',
