@@ -47,18 +47,18 @@ add_action( 'rest_api_init', function () {
 		),
 	) );
 	register_rest_route( 'bbp-api/v1', '/topics/', array(
-		'methods' => 'GET',
-		'callback' => 'bbp_api_topics',
-	) );
-	register_rest_route( 'bbp-api/v1', '/topics/(?P<id>\d+)', array(
 		array(
 			'methods' => WP_REST_Server::READABLE,
-			'callback' => 'bbp_api_topics_one',
+			'callback' => 'bbp_api_topics',
 		),
 		array(
 			'methods' => WP_REST_Server::CREATABLE,
 			'callback' => 'bbp_api_topics_post',
 		),
+	) );
+	register_rest_route( 'bbp-api/v1', '/topics/(?P<id>\d+)', array(
+			'methods' => WP_REST_Server::READABLE,
+			'callback' => 'bbp_api_topics_one',
 	) );
 	register_rest_route( 'bbp-api/v1', '/replies/', array(
 		'methods' => 'GET',
@@ -83,3 +83,26 @@ add_action( 'rest_api_init', function () {
 		'callback' => 'bbp_api_stats',
 	) );
 } );
+
+//helper functions
+/*
+ * Ensure that required fields are filled out.
+ * array fields: fields to check
+ * array submission_data: submitted data to iterate over
+ * return $response: WP_REST_Response in case of bad field, otherwise zero.
+*/
+function bbp_api_filter_input($fields, $submission_data) {
+	$bad_fields = "";
+	foreach($fields as $field) {
+		if(empty($submission_data[$field])) {
+			$bad_fields .= $field . " ";
+		}
+	}
+	if (!empty($bad_fields)) {
+		$msg = "Missing fields:";
+		$response = new WP_REST_Response( array($msg, $bad_fields) );
+		$response->set_status( 422 );
+		return $response;
+	}
+	return 0;
+}

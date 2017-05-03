@@ -44,14 +44,22 @@ function bbp_api_replies_one($data) {
 /*
  * Setting up POST for new replies via API.
  * Example code in BBPress here: includes/core/update.php
- * requires content and email fields in the POST data to work.
+ * Function code here: /includes/replies/functions.php
  * array data: submitted information from POST requested
  * return string reply_id: id number for accepted post
 */
 function bbp_api_replies_post($data) {
+	//required fields in POST data
 	$all_reply_data = bbp_api_replies_info($data['id']);
 	$all_reply_data['content'] = $data['content'];
 	$myuser = get_user_by("email", $data['email']);
+
+	$reply_fields = array("content", "email");
+	$filter_check = bbp_api_filter_input($reply_fields, $all_topic_data);
+	if (!empty($filter_check)) {
+		return $filter_check;
+	}
+
 	$reply_id = bbp_insert_reply(
     array(
       'post_parent'  => $all_reply_data['topic_id'],

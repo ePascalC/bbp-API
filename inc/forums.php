@@ -44,7 +44,7 @@ function bbp_api_forums() {
 */
 function bbp_api_forums_one($data) {
 	$all_forum_data = array();
-	
+
 	$forum_id = bbp_get_forum_id($data['id']);
 	if ($forum_id) {
 		$all_forum_data['id'] = $forum_id;
@@ -68,7 +68,7 @@ function bbp_api_forums_one($data) {
 			$all_forum_data['subforums'][$i]['type'] = bbp_get_forum_type($subforum_id);
 			$i++;
 		}
-		
+
 		$i = 0;
 		if ( bbp_has_topics ( array( 'orderby' => 'date', 'order' => 'DESC', 'posts_per_page' => 20, 'post_parent' => $forum_id ) ) );
 		while ( bbp_topics() ) : bbp_the_topic();
@@ -80,7 +80,7 @@ function bbp_api_forums_one($data) {
 			$i++;
 		endwhile;
 	}
-	
+
 	if ( empty( $all_forum_data ) ) {
 		return null;
 	}
