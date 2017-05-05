@@ -45,6 +45,7 @@ function bbp_api_topics_one($data) {
  * Example code in BBPress here: includes/core/update.php
  * Function code here: /includes/topics/functions.php
  * array data: submitted information from POST requested
+ * required args - content, title, forum_id, email
  * return string reply_id: id number for accepted post
 */
 function bbp_api_topics_post($data) {

@@ -46,6 +46,7 @@ function bbp_api_replies_one($data) {
  * Example code in BBPress here: includes/core/update.php
  * Function code here: /includes/replies/functions.php
  * array data: submitted information from POST requested
+ * required args - content, email
  * return string reply_id: id number for accepted post
 */
 function bbp_api_replies_post($data) {
@@ -59,7 +60,7 @@ function bbp_api_replies_post($data) {
 	if (!empty($filter_check)) {
 		return $filter_check;
 	}
-	
+
 	$myuser = get_user_by("email", $data['email']);
 	$reply_id = bbp_insert_reply(
     array(
