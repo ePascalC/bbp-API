@@ -52,6 +52,24 @@ add_action( 'rest_api_init', function () {
 			'callback' => 'bbp_api_topics',
 		),
 		array(
+			'args' => array(
+				'content' => array(
+					'description' => 'Content for the initial post in the new topic.',
+					'type' => 'string',
+				),
+				'title' => array(
+					'description' => 'Title for the new topic.',
+					'type' => 'string',
+				),
+				'forum_id' => array(
+					'description' => 'ID of the forum to create the new topic within.',
+					'type' => 'integer',
+				),
+				'email' => array(
+					'description' => 'Email address of the thread author.',
+					'type' => 'string',
+				),
+			),
 			'methods' => WP_REST_Server::CREATABLE,
 			'callback' => 'bbp_api_topics_post',
 		),
@@ -70,6 +88,16 @@ add_action( 'rest_api_init', function () {
 			'callback' => 'bbp_api_replies_one',
 		),
 		array(
+			'args' => array(
+				'content' => array(
+					'description' => 'Content for the reply.',
+					'type' => 'string',
+				),
+				'email' => array(
+					'description' => 'Email address of the reply author.',
+					'type' => 'string',
+				),
+			),
 			'methods' => WP_REST_Server::CREATABLE,
 			'callback' => 'bbp_api_replies_post',
 		),
