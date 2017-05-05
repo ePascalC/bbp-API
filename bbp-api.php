@@ -32,11 +32,11 @@ include(BBPAPI_PLUGIN_DIR . '/inc/stats.php');
 */
 
 add_action( 'rest_api_init', function () {
-	register_rest_route( 'bbp-api/v1', '/forums/', array(
+	register_rest_route( 'bbp-api/v1', '/' . bbp_get_forum_slug() . '/', array(
 		'methods' => WP_REST_Server::READABLE,
 		'callback' => 'bbp_api_forums',
 	) );
-	register_rest_route( 'bbp-api/v1', '/forums/(?P<id>\d+)', array(
+	register_rest_route( 'bbp-api/v1', '/' . bbp_get_forum_slug() . '/(?P<id>\d+)', array(
 		array(
 		'methods' => WP_REST_Server::READABLE,
 		'callback' => 'bbp_api_forums_one',
@@ -46,7 +46,7 @@ add_action( 'rest_api_init', function () {
 			'callback' => 'bbp_api_forums_post',
 		),
 	) );
-	register_rest_route( 'bbp-api/v1', '/topics/', array(
+	register_rest_route( 'bbp-api/v1', '/' . bbp_get_topic_slug() . '/', array(
 		array(
 			'methods' => WP_REST_Server::READABLE,
 			'callback' => 'bbp_api_topics',
@@ -67,6 +67,9 @@ add_action( 'rest_api_init', function () {
 					'required' => True,
 					'description' => 'ID of the forum to create the new topic within.',
 					'type' => 'integer',
+					'sanitize_callback' => function($arg, $request, $key) {
+						return is_numeric( $param );
+						},
 				),
 				'email' => array(
 					'required' => True,
@@ -78,15 +81,15 @@ add_action( 'rest_api_init', function () {
 			'callback' => 'bbp_api_topics_post',
 		),
 	) );
-	register_rest_route( 'bbp-api/v1', '/topics/(?P<id>\d+)', array(
+	register_rest_route( 'bbp-api/v1', '/' . bbp_get_topic_slug() . '/(?P<id>\d+)', array(
 			'methods' => WP_REST_Server::READABLE,
 			'callback' => 'bbp_api_topics_one',
 	) );
-	register_rest_route( 'bbp-api/v1', '/replies/', array(
+	register_rest_route( 'bbp-api/v1', '/' . bbp_get_reply_slug() . '/', array(
 		'methods' => WP_REST_Server::READABLE,
 		'callback' => 'bbp_api_replies',
 	) );
-	register_rest_route( 'bbp-api/v1', '/replies/(?P<id>\d+)', array(
+	register_rest_route( 'bbp-api/v1', '/' . bbp_get_reply_slug() . '/(?P<id>\d+)', array(
 		array(
 			'methods' => WP_REST_Server::READABLE,
 			'callback' => 'bbp_api_replies_one',
@@ -108,7 +111,7 @@ add_action( 'rest_api_init', function () {
 			'callback' => 'bbp_api_replies_post',
 		),
 	) );
-	register_rest_route( 'bbp-api/v1', '/topic-tags/', array(
+	register_rest_route( 'bbp-api/v1', '/' . bbp_get_topic_tag_tax_slug() . '/', array(
 		'methods' => WP_REST_Server::READABLE,
 		'callback' => 'bbp_api_topic_tags',
 	) );
@@ -117,26 +120,3 @@ add_action( 'rest_api_init', function () {
 		'callback' => 'bbp_api_stats',
 	) );
 } );
-
-//helper functions
-/*
- * Ensure that required fields are filled out.
- * array fields: fields to check
- * array submission_data: submitted data to iterate over
- * return $response: WP_REST_Response in case of bad field, otherwise zero.
-*/
-function bbp_api_filter_input($fields, $submission_data) {
-	$bad_fields = "";
-	foreach($fields as $field) {
-		if(empty($submission_data[$field])) {
-			$bad_fields .= $field . " ";
-		}
-	}
-	if (!empty($bad_fields)) {
-		$msg = "Missing fields:";
-		$response = new WP_REST_Response( array($msg, $bad_fields) );
-		$response->set_status( 422 );
-		return $response;
-	}
-	return 0;
-}

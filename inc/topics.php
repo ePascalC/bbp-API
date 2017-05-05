@@ -56,12 +56,6 @@ function bbp_api_topics_post($data) {
 	$all_topic_data['forum_id'] = $data['forum_id'];
 	$all_topic_data['email'] = $data['email'];
 
-	$topic_fields = array("content", "title", "forum_id", "email");
-	$filter_check = bbp_api_filter_input($topic_fields, $all_topic_data);
-	if (!empty($filter_check)) {
-		return $filter_check;
-	}
-
 	$myuser = get_user_by("email", $data['email']);
 	$reply_id = bbp_insert_topic(
     array(

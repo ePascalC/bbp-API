@@ -55,12 +55,6 @@ function bbp_api_replies_post($data) {
 	$all_reply_data['content'] = $data['content'];
 	$all_reply_data['email'] = $data['email'];
 
-	$reply_fields = array("content", "email");
-	$filter_check = bbp_api_filter_input($reply_fields, $all_reply_data);
-	if (!empty($filter_check)) {
-		return $filter_check;
-	}
-
 	$myuser = get_user_by("email", $data['email']);
 	$reply_id = bbp_insert_reply(
     array(
