@@ -11,17 +11,13 @@
 /**
  * Testing the posting a topic.
  */
-class PostTopic extends WP_UnitTestCase {
+class GetTopicTags extends WP_UnitTestCase {
 	/**
 	* setting up the WP REST Server
 	*/
 	protected $prefix = "/bbp-api/v1/forums";
 	protected $registeredRoutes = array(
-		"/forum",
-		"/topic",
-		"/reply",
-		"/topic-tags",
-		"/stats"
+		"/topic-tag",
 	);
 
 	function setUp() {
@@ -39,7 +35,6 @@ class PostTopic extends WP_UnitTestCase {
 	 */
 	function testRouteRegistration() {
 		$routes = $this->server->get_routes();
-		print_r(array_keys($routes));
 		foreach ($this->registeredRoutes as &$route) {
 			$this->assertArrayHasKey( $this->prefix . $route, $routes );
 		}

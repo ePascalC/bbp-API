@@ -17,11 +17,7 @@ class PostTopic extends WP_UnitTestCase {
 	*/
 	protected $prefix = "/bbp-api/v1/forums";
 	protected $registeredRoutes = array(
-		"/forum",
 		"/topic",
-		"/reply",
-		"/topic-tags",
-		"/stats"
 	);
 
 	function setUp() {
@@ -39,7 +35,6 @@ class PostTopic extends WP_UnitTestCase {
 	 */
 	function testRouteRegistration() {
 		$routes = $this->server->get_routes();
-		print_r(array_keys($routes));
 		foreach ($this->registeredRoutes as &$route) {
 			$this->assertArrayHasKey( $this->prefix . $route, $routes );
 		}
