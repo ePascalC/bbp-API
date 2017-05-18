@@ -11,7 +11,7 @@
 /**
  * Testing the posting a topic.
  */
-class PostTopic extends WP_UnitTestCase {
+class GetTopic extends WP_UnitTestCase {
 	/**
 	* setting up the WP REST Server
 	*/
@@ -20,8 +20,8 @@ class PostTopic extends WP_UnitTestCase {
 		"/topic",
 	);
   protected $topic_data = array(
-    "title" => "Posted Test Topic.",
-    "content" => "Posted Initial Content.",
+    "title" => "Test Topic.",
+    "content" => "Initial Content.",
   );
 
 	function setUp() {
@@ -34,6 +34,7 @@ class PostTopic extends WP_UnitTestCase {
 		$this->server = $wp_rest_server = new WP_REST_Server;
 		do_action( 'rest_api_init' );
     $this->newForum = $testCommon->createBBPForum();
+    $this->newTopic = $testCommon->createBBPTopic($this->newForum, $this->topic_data);
 	}
 	/**
 	 * A single example test.
@@ -48,9 +49,12 @@ class PostTopic extends WP_UnitTestCase {
   function testGetTopic() {
     $routes = $this->server->get_routes();
     foreach ($this->registeredRoutes as &$route) {
-      $request = new WP_REST_Request("GET", $this->prefix . $route);
+      $request = new WP_REST_Request("GET", $this->prefix . $route . "/" . $this->newTopic);
       $response = $this->server->dispatch( $request );
       //print_r($response);
+      $this->assertEquals(200, $response->status);
+      $this->assertEquals($this->topic_data["title"], $response->data["title"]);
+      //$this->assertEquals($this->topic_data[""], $response->data["content"]);
     }
   }
 

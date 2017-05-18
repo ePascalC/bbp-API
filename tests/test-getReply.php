@@ -11,17 +11,23 @@
 /**
  * Testing the posting a topic.
  */
-class PostTopic extends WP_UnitTestCase {
+class GetReply extends WP_UnitTestCase {
 	/**
 	* setting up the WP REST Server
 	*/
 	protected $prefix = "/bbp-api/v1/forums";
 	protected $registeredRoutes = array(
-		"/topic",
+		"/reply",
 	);
+
   protected $topic_data = array(
-    "title" => "Posted Test Topic.",
-    "content" => "Posted Initial Content.",
+    "title" => "Test Topic.",
+    "content" => "Initial Content.",
+  );
+
+  protected $reply_data = array(
+    "title" => "Test reply.",
+    "content" => "Second reply in the thread.",
   );
 
 	function setUp() {
@@ -34,6 +40,11 @@ class PostTopic extends WP_UnitTestCase {
 		$this->server = $wp_rest_server = new WP_REST_Server;
 		do_action( 'rest_api_init' );
     $this->newForum = $testCommon->createBBPForum();
+    $this->newTopic = $testCommon->createBBPTopic($this->newForum,
+      $this->topic_data);
+    $this->newReply = $testCommon->createBBPReply($this->newForum,
+      $this->newTopic,
+      $this->reply_data);
 	}
 	/**
 	 * A single example test.
@@ -45,12 +56,14 @@ class PostTopic extends WP_UnitTestCase {
 		}
 	}
 
-  function testGetTopic() {
+  function testGetReply() {
     $routes = $this->server->get_routes();
     foreach ($this->registeredRoutes as &$route) {
-      $request = new WP_REST_Request("GET", $this->prefix . $route);
-      $response = $this->server->dispatch( $request );
-      //print_r($response);
+      $replyRequest = new WP_REST_Request("GET", $this->prefix . $route . "/" . $this->newReply);
+      $replyResponse = $this->server->dispatch( $replyRequest );
+      $this->assertEquals(200, $replyResponse->status);
+      $this->assertEquals($this->reply_data["title"], $replyResponse->data["title"]);
+      $this->assertEquals($this->reply_data["content"], $replyResponse->data["content"]);
     }
   }
 

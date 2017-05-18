@@ -10,6 +10,8 @@ function bbp_api_topics_info($topic_id, $scope="public") {
 		$all_topic_data['reply_count'] = bbp_get_topic_reply_count($topic_id);
 		$all_topic_data['permalink'] = bbp_get_topic_permalink($topic_id);
 		$all_topic_data['tags'] = bbp_get_topic_tag_list($topic_id, array ('before' => ''));
+		$all_topic_data['last_reply'] = bbp_get_topic_last_reply_id($topic_id);
+
 	}
 	if ( empty( $all_topic_data ) ) {
 		return null;

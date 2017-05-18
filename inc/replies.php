@@ -11,6 +11,8 @@ function bbp_api_replies_info($reply_id) {
 		$all_reply_data['topic_id'] = bbp_get_reply_topic_id($all_reply_data['id']);
 		$all_reply_data['forum_id'] = bbp_get_topic_forum_id($all_reply_data['topic_id']);
 		$all_reply_data['tags'] = bbp_get_topic_tag_list($all_reply_data['topic_id'], array ('before' => ''));
+		$all_reply_data['content'] = bbp_get_reply_content($reply_id);
+
 
 	}
 	if ( empty( $all_reply_data ) ) {

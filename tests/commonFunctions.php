@@ -51,4 +51,73 @@ class Bbp_API_test_common {
       $this->active_plugins = get_option("active_plugins");
     }
   }
+
+
+  /**
+   * Create BBPress forum for testing.
+   * @return int $forum_id  ID of the created forum.
+   *
+   */
+  function createBBPForum() {
+    if(file_exists($this->bbpress)) {
+      include_once($this->bbpress);
+    }
+    $forum_id = bbp_insert_topic(
+      array(
+        'post_parent'  => 0,
+        'post_title'   => "Test Forum",
+        'post_content' => "Test Content",
+        'post_author' => 1,
+      ));
+    return $forum_id;
+
+  }
+
+  /**
+   * Create BBPress topic for testing.
+   * @param  int $forum_id   ID of the forum to create the new topic within.
+   * @param  array $topic_data  Array containing title and content of initial
+   * post on the new topic.
+   * @return int $topic_id  ID of the created topic.
+   */
+  function createBBPTopic($forum_id, $topic_data) {
+    if(file_exists($this->bbpress)) {
+      include_once($this->bbpress);
+    }
+    $topic_id = bbp_insert_topic(
+      array(
+        'post_parent'  => 0,
+        'post_title'   => $topic_data["title"],
+        'post_content' => $topic_data["content"],
+        'post_author' => 0,
+      ),
+      array(
+        'forum_id'     => $forum_id,
+      )
+    );
+    return $topic_id;
+  }
+
+  /**
+   * Create reply to topic for testing.
+   * @return int ID of the created reply.
+   */
+  function createBBPReply($forum_id, $topic_id, $reply_data) {
+    if(file_exists($this->bbpress)) {
+      include_once($this->bbpress);
+    }
+    $reply_id = bbp_insert_reply(
+      array(
+        'post_parent'  => 0,
+        'post_title'   => $reply_data['title'],
+        'post_content' => $reply_data['content'],
+        'post_author' => 0,
+      ),
+      array(
+        'forum_id'     => $forum_id,
+        'topic_id'     => $topic_id,
+      )
+    );
+    return $reply_id;
+  }
 }
