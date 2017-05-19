@@ -16,13 +16,12 @@ class PostTopic extends WP_UnitTestCase {
 	* setting up the WP REST Server
 	*/
 	protected $prefix = "/bbp-api/v1/forums";
-	protected $registeredRoutes = array(
-		"/topic",
-	);
+	protected $registeredRoute = "/topic";
   protected $topic_data = array(
     "title" => "Posted Test Topic.",
     "content" => "Posted Initial Content.",
   );
+  protected $user_email = "admin@example.org";
 
 	function setUp() {
 
@@ -35,23 +34,18 @@ class PostTopic extends WP_UnitTestCase {
 		do_action( 'rest_api_init' );
     $this->newForum = $testCommon->createBBPForum();
 	}
-	/**
-	 * A single example test.
-	 */
-	function testRouteRegistration() {
-		$routes = $this->server->get_routes();
-		foreach ($this->registeredRoutes as &$route) {
-			$this->assertArrayHasKey( $this->prefix . $route, $routes );
-		}
-	}
 
-  function testGetTopic() {
-    $routes = $this->server->get_routes();
-    foreach ($this->registeredRoutes as &$route) {
-      $request = new WP_REST_Request("GET", $this->prefix . $route);
-      $response = $this->server->dispatch( $request );
-      //print_r($response);
-    }
+  function testPostTopic() {
+    $request = new WP_REST_Request("POST", $this->prefix . $this->registeredRoute);
+    $request->set_body_params( array(
+      "title" => $this->topic_data["title"],
+      "content" => $this->topic_data["content"],
+      "forum_id" => $this->newForum,
+      "email" => $this->user_email,
+    ));
+    //print_r($request);
+    $response = $this->server->dispatch( $request );
+    print_r($response);
   }
 
 	function tearDown() {

@@ -89,7 +89,7 @@ class Bbp_API_test_common {
         'post_parent'  => 0,
         'post_title'   => $topic_data["title"],
         'post_content' => $topic_data["content"],
-        'post_author' => 0,
+        'post_author' => 1,
       ),
       array(
         'forum_id'     => $forum_id,
@@ -111,7 +111,7 @@ class Bbp_API_test_common {
         'post_parent'  => 0,
         'post_title'   => $reply_data['title'],
         'post_content' => $reply_data['content'],
-        'post_author' => 0,
+        'post_author' => 1,
       ),
       array(
         'forum_id'     => $forum_id,

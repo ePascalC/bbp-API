@@ -59,12 +59,13 @@ function bbp_api_topics_post($data) {
 	$all_topic_data['email'] = $data['email'];
 
 	$myuser = get_user_by("email", $data['email']);
+	print_r($myuser);
 	$reply_id = bbp_insert_topic(
     array(
 			'post_parent'  => $all_topic_data['forum_id'],
       'post_title'   => $all_topic_data['title'],
       'post_content' => $all_topic_data['content'],
-			'post_author' => $myuser->id,
+			'post_author' => $myuser->ID,
     ),
     array(
       'forum_id'     => $all_topic_data['forum_id'],

@@ -67,7 +67,7 @@ add_action( 'rest_api_init', function () {
 					'required' => True,
 					'description' => 'ID of the forum to create the new topic within.',
 					'type' => 'integer',
-					'sanitize_callback' => function($arg, $request, $key) {
+					'sanitize_callback' => function($value, $request, $param) {
 						return is_numeric( $param );
 						},
 				),
