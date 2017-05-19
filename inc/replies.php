@@ -63,7 +63,7 @@ function bbp_api_replies_post($data) {
       'post_parent'  => $all_reply_data['topic_id'],
       'post_title'   => $all_reply_data['title'],
       'post_content' => $all_reply_data['content'],
-			'post_author' => $myuser->id,
+			'post_author' => $myuser->ID,
     ),
     array(
       'forum_id'     => $all_reply_data['forum_id'],
