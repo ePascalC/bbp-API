@@ -32,7 +32,8 @@ class GetTopic extends WP_UnitTestCase {
 		$this->server = $wp_rest_server = new WP_REST_Server;
 		do_action( 'rest_api_init' );
     $this->newForum = $testCommon->createBBPForum();
-    $this->newTopic = $testCommon->createBBPTopic($this->newForum, $this->topic_data);
+    $this->newTopic = $testCommon->createBBPTopic( $this->newForum,
+      $this->topic_data );
 	}
 	/**
 	 * A single example test.
@@ -43,10 +44,11 @@ class GetTopic extends WP_UnitTestCase {
 	}
 
   function testGetTopic() {
-    $request = new WP_REST_Request("GET", $this->prefix . $this->registeredRoute . "/" . $this->newTopic);
+    $request = new WP_REST_Request( "GET",
+      $this->prefix . $this->registeredRoute . "/" . $this->newTopic );
     $response = $this->server->dispatch( $request );
-    $this->assertEquals(200, $response->status);
-    $this->assertEquals($this->topic_data["title"], $response->data["title"]);
+    $this->assertEquals( 200, $response->status );
+    $this->assertEquals( $this->topic_data["title"], $response->data["title"] );
   }
 
 	function tearDown() {

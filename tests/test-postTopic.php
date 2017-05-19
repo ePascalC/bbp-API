@@ -37,7 +37,8 @@ class PostTopic extends WP_UnitTestCase {
 
   function testPostTopic() {
     //post new topic
-    $request = new WP_REST_Request("POST", $this->prefix . $this->registeredRoute);
+    $request = new WP_REST_Request( "POST",
+      $this->prefix . $this->registeredRoute );
     $request->set_body_params( array(
       "title" => $this->topic_data["title"],
       "content" => $this->topic_data["content"],
@@ -45,46 +46,54 @@ class PostTopic extends WP_UnitTestCase {
       "email" => $this->user_email,
     ));
     $response = $this->server->dispatch( $request );
-    $this->assertEquals(200, $response->status);
+    $this->assertEquals( 200, $response->status );
     //check content tied to new topic
-    $replyRequest = new WP_REST_Request("GET", $this->prefix . "/reply/" . $response->data);
+    $replyRequest = new WP_REST_Request( "GET",
+      $this->prefix . "/reply/" . $response->data );
     $replyResponse = $this->server->dispatch( $replyRequest );
-    $this->assertEquals(200, $response->status);
-    $this->assertEquals($this->topic_data["title"], $replyResponse->data["title"]);
-    $this->assertEquals($this->topic_data["content"], $replyResponse->data["content"]);
+    $this->assertEquals( 200, $response->status );
+    $this->assertEquals( $this->topic_data["title"],
+      $replyResponse->data["title"] );
+    $this->assertEquals( $this->topic_data["content"],
+      $replyResponse->data["content"] );
   }
 
   function testPostTopicNoTitle() {
     //post new topic
-    $request = new WP_REST_Request("POST", $this->prefix . $this->registeredRoute);
+    $request = new WP_REST_Request( "POST",
+      $this->prefix . $this->registeredRoute );
     $request->set_body_params( array(
       "content" => $this->topic_data["content"],
       "forum_id" => $this->newForum,
       "email" => $this->user_email,
     ));
     $response = $this->server->dispatch( $request );
-    $this->assertNotEquals(200, $response->status);
-    $this->assertEquals("rest_missing_callback_param", $response->data["code"]);
-    $this->assertContains("title", $response->data["data"]["params"]);
+    $this->assertNotEquals( 200, $response->status );
+    $this->assertEquals( "rest_missing_callback_param",
+      $response->data["code"] );
+    $this->assertContains( "title", $response->data["data"]["params"] );
   }
 
   function testPostTopicNoContent() {
     //post new topic
-    $request = new WP_REST_Request("POST", $this->prefix . $this->registeredRoute);
+    $request = new WP_REST_Request( "POST",
+      $this->prefix . $this->registeredRoute );
     $request->set_body_params( array(
       "title" => $this->topic_data["title"],
       "forum_id" => $this->newForum,
       "email" => $this->user_email,
     ));
     $response = $this->server->dispatch( $request );
-    $this->assertNotEquals(200, $response->status);
-    $this->assertEquals("rest_missing_callback_param", $response->data["code"]);
-    $this->assertContains("content", $response->data["data"]["params"]);
+    $this->assertNotEquals( 200, $response->status );
+    $this->assertEquals( "rest_missing_callback_param",
+      $response->data["code"] );
+    $this->assertContains( "content", $response->data["data"]["params"] );
   }
 
   function testPostTopicNoForumID() {
     //post new topic
-    $request = new WP_REST_Request("POST", $this->prefix . $this->registeredRoute);
+    $request = new WP_REST_Request( "POST",
+      $this->prefix . $this->registeredRoute );
     $request->set_body_params( array(
       "title" => $this->topic_data["title"],
       "content" => $this->topic_data["content"],
@@ -92,22 +101,25 @@ class PostTopic extends WP_UnitTestCase {
     ));
     $response = $this->server->dispatch( $request );
     $this->assertNotEquals(200, $response->status);
-    $this->assertEquals("rest_missing_callback_param", $response->data["code"]);
-    $this->assertContains("forum_id", $response->data["data"]["params"]);
+    $this->assertEquals( "rest_missing_callback_param",
+      $response->data["code"] );
+    $this->assertContains( "forum_id", $response->data["data"]["params"] );
   }
 
   function testPostTopicNoEmail() {
     //post new topic
-    $request = new WP_REST_Request("POST", $this->prefix . $this->registeredRoute);
+    $request = new WP_REST_Request( "POST",
+      $this->prefix . $this->registeredRoute );
     $request->set_body_params( array(
       "title" => $this->topic_data["title"],
       "content" => $this->topic_data["content"],
       "forum_id" => $this->newForum,
     ));
     $response = $this->server->dispatch( $request );
-    $this->assertNotEquals(200, $response->status);
-    $this->assertEquals("rest_missing_callback_param", $response->data["code"]);
-    $this->assertContains("email", $response->data["data"]["params"]);
+    $this->assertNotEquals( 200, $response->status );
+    $this->assertEquals( "rest_missing_callback_param",
+      $response->data["code"] );
+    $this->assertContains( "email", $response->data["data"]["params"] );
   }
 
 	function tearDown() {

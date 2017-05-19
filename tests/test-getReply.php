@@ -38,11 +38,11 @@ class GetReply extends WP_UnitTestCase {
 		$this->server = $wp_rest_server = new WP_REST_Server;
 		do_action( 'rest_api_init' );
     $this->newForum = $testCommon->createBBPForum();
-    $this->newTopic = $testCommon->createBBPTopic($this->newForum,
+    $this->newTopic = $testCommon->createBBPTopic( $this->newForum,
       $this->topic_data);
-    $this->newReply = $testCommon->createBBPReply($this->newForum,
+    $this->newReply = $testCommon->createBBPReply( $this->newForum,
       $this->newTopic,
-      $this->reply_data);
+      $this->reply_data );
 	}
 	/**
 	 * A single example test.
@@ -53,11 +53,14 @@ class GetReply extends WP_UnitTestCase {
 	}
 
   function testGetReply() {
-    $replyRequest = new WP_REST_Request("GET", $this->prefix . $this->registeredRoute . "/" . $this->newReply);
+    $replyRequest = new WP_REST_Request( "GET",
+      $this->prefix . $this->registeredRoute . "/" . $this->newReply );
     $replyResponse = $this->server->dispatch( $replyRequest );
-    $this->assertEquals(200, $replyResponse->status);
-    $this->assertEquals($this->reply_data["title"], $replyResponse->data["title"]);
-    $this->assertEquals($this->reply_data["content"], $replyResponse->data["content"]);
+    $this->assertEquals( 200, $replyResponse->status );
+    $this->assertEquals( $this->reply_data["title"],
+      $replyResponse->data["title"] );
+    $this->assertEquals( $this->reply_data["content"],
+      $replyResponse->data["content"] );
   }
 
 	function tearDown() {

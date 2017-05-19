@@ -35,7 +35,7 @@ class GetTopicTags extends WP_UnitTestCase {
 	 */
 	function testRouteRegistration() {
 		$routes = $this->server->get_routes();
-		foreach ($this->registeredRoutes as &$route) {
+		foreach ( $this->registeredRoutes as &$route ) {
 			$this->assertArrayHasKey( $this->prefix . $route, $routes );
 		}
 	}

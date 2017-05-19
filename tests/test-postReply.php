@@ -48,57 +48,58 @@ class PostReply extends WP_UnitTestCase {
 	 */
 	function testPostReply() {
     //get initial reply on test thread
-    $topicRequest = new WP_REST_Request("GET",
-      $this->prefix . "/topic/" . $this->newTopic);
+    $topicRequest = new WP_REST_Request( "GET",
+      $this->prefix . "/topic/" . $this->newTopic );
     $topicResponse = $this->server->dispatch( $topicRequest );
     //POST a reply to the returned reply id
-    $replyRequest = new WP_REST_Request("POST",
-      $this->prefix . $this->registeredRoute . "/" . $topicResponse->data["last_reply"]);
+    $replyRequest = new WP_REST_Request( "POST",
+      $this->prefix . $this->registeredRoute . "/" . $topicResponse->data["last_reply"] );
     $replyRequest->set_body_params( array(
       "content" => $this->reply_data["content"],
       "email" => $this->user_email,
     ));
     $replyResponse = $this->server->dispatch( $replyRequest );
-    $this->assertEquals(200, $replyResponse->status);
+    $this->assertEquals( 200, $replyResponse->status );
     //retrieve the POSTed content.
-    $verifyRequest = new WP_REST_Request("GET",
-      $this->prefix . $this->registeredRoute . "/" . $replyResponse->data);
+    $verifyRequest = new WP_REST_Request( "GET",
+      $this->prefix . $this->registeredRoute . "/" . $replyResponse->data );
     $verifyResponse = $this->server->dispatch( $verifyRequest );
-    $this->assertEquals($this->reply_data["content"], $verifyResponse->data["content"]);
+    $this->assertEquals( $this->reply_data["content"],
+      $verifyResponse->data["content"] );
 	}
 
   function testPostReplyNoContent() {
     //get initial reply on test thread
-    $topicRequest = new WP_REST_Request("GET",
-      $this->prefix . "/topic/" . $this->newTopic);
+    $topicRequest = new WP_REST_Request( "GET",
+      $this->prefix . "/topic/" . $this->newTopic );
     $topicResponse = $this->server->dispatch( $topicRequest );
     //POST a reply to the returned reply id
-    $replyRequest = new WP_REST_Request("POST",
-      $this->prefix . $this->registeredRoute . "/" . $topicResponse->data["last_reply"]);
+    $replyRequest = new WP_REST_Request( "POST",
+      $this->prefix . $this->registeredRoute . "/" . $topicResponse->data["last_reply"] );
     $replyRequest->set_body_params( array(
       "email" => $this->user_email,
     ));
     $replyResponse = $this->server->dispatch( $replyRequest );
-    $this->assertNotEquals(200, $replyResponse->status);
-    $this->assertEquals("rest_missing_callback_param", $replyResponse->data["code"]);
-    $this->assertContains("content", $replyResponse->data["data"]["params"]);
+    $this->assertNotEquals( 200, $replyResponse->status );
+    $this->assertEquals( "rest_missing_callback_param", $replyResponse->data["code"] );
+    $this->assertContains( "content", $replyResponse->data["data"]["params"] );
   }
 
   function testPostReplyNoEmail() {
     //get initial reply on test thread
-    $topicRequest = new WP_REST_Request("GET",
-      $this->prefix . "/topic/" . $this->newTopic);
+    $topicRequest = new WP_REST_Request( "GET",
+      $this->prefix . "/topic/" . $this->newTopic );
     $topicResponse = $this->server->dispatch( $topicRequest );
     //POST a reply to the returned reply id
-    $replyRequest = new WP_REST_Request("POST",
-      $this->prefix . $this->registeredRoute . "/" . $topicResponse->data["last_reply"]);
+    $replyRequest = new WP_REST_Request( "POST",
+      $this->prefix . $this->registeredRoute . "/" . $topicResponse->data["last_reply"] );
     $replyRequest->set_body_params( array(
       "content" => $this->reply_data["content"],
     ));
     $replyResponse = $this->server->dispatch( $replyRequest );
-    $this->assertNotEquals(200, $replyResponse->status);
-    $this->assertEquals("rest_missing_callback_param", $replyResponse->data["code"]);
-    $this->assertContains("email", $replyResponse->data["data"]["params"]);
+    $this->assertNotEquals( 200, $replyResponse->status );
+    $this->assertEquals( "rest_missing_callback_param", $replyResponse->data["code"] );
+    $this->assertContains( "email", $replyResponse->data["data"]["params"] );
   }
 
 	function tearDown() {
