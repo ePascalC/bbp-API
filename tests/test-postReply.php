@@ -59,7 +59,6 @@ class PostReply extends WP_UnitTestCase {
       "email" => $this->user_email,
     ));
     $replyResponse = $this->server->dispatch( $replyRequest );
-    print_r($replyResponse);
     $this->assertEquals(200, $replyResponse->status);
     //retrieve the POSTed content.
     $verifyRequest = new WP_REST_Request("GET",
