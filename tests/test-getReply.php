@@ -16,9 +16,7 @@ class GetReply extends WP_UnitTestCase {
 	* setting up the WP REST Server
 	*/
 	protected $prefix = "/bbp-api/v1/forums";
-	protected $registeredRoutes = array(
-		"/reply",
-	);
+	protected $registeredRoute = "/reply";
 
   protected $topic_data = array(
     "title" => "Test Topic.",
@@ -51,20 +49,15 @@ class GetReply extends WP_UnitTestCase {
 	 */
 	function testRouteRegistration() {
 		$routes = $this->server->get_routes();
-		foreach ($this->registeredRoutes as &$route) {
-			$this->assertArrayHasKey( $this->prefix . $route, $routes );
-		}
+		$this->assertArrayHasKey( $this->prefix . $this->registeredRoute, $routes );
 	}
 
   function testGetReply() {
-    $routes = $this->server->get_routes();
-    foreach ($this->registeredRoutes as &$route) {
-      $replyRequest = new WP_REST_Request("GET", $this->prefix . $route . "/" . $this->newReply);
-      $replyResponse = $this->server->dispatch( $replyRequest );
-      $this->assertEquals(200, $replyResponse->status);
-      $this->assertEquals($this->reply_data["title"], $replyResponse->data["title"]);
-      $this->assertEquals($this->reply_data["content"], $replyResponse->data["content"]);
-    }
+    $replyRequest = new WP_REST_Request("GET", $this->prefix . $this->registeredRoute . "/" . $this->newReply);
+    $replyResponse = $this->server->dispatch( $replyRequest );
+    $this->assertEquals(200, $replyResponse->status);
+    $this->assertEquals($this->reply_data["title"], $replyResponse->data["title"]);
+    $this->assertEquals($this->reply_data["content"], $replyResponse->data["content"]);
   }
 
 	function tearDown() {

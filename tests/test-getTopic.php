@@ -16,9 +16,7 @@ class GetTopic extends WP_UnitTestCase {
 	* setting up the WP REST Server
 	*/
 	protected $prefix = "/bbp-api/v1/forums";
-	protected $registeredRoutes = array(
-		"/topic",
-	);
+	protected $registeredRoute = "/topic";
   protected $topic_data = array(
     "title" => "Test Topic.",
     "content" => "Initial Content.",
@@ -41,19 +39,14 @@ class GetTopic extends WP_UnitTestCase {
 	 */
 	function testRouteRegistration() {
 		$routes = $this->server->get_routes();
-		foreach ($this->registeredRoutes as &$route) {
-			$this->assertArrayHasKey( $this->prefix . $route, $routes );
-		}
+		$this->assertArrayHasKey( $this->prefix . $this->registeredRoute, $routes );
 	}
 
   function testGetTopic() {
-    $routes = $this->server->get_routes();
-    foreach ($this->registeredRoutes as &$route) {
-      $request = new WP_REST_Request("GET", $this->prefix . $route . "/" . $this->newTopic);
-      $response = $this->server->dispatch( $request );
-      $this->assertEquals(200, $response->status);
-      $this->assertEquals($this->topic_data["title"], $response->data["title"]);
-    }
+    $request = new WP_REST_Request("GET", $this->prefix . $this->registeredRoute . "/" . $this->newTopic);
+    $response = $this->server->dispatch( $request );
+    $this->assertEquals(200, $response->status);
+    $this->assertEquals($this->topic_data["title"], $response->data["title"]);
   }
 
 	function tearDown() {
