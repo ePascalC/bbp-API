@@ -27,6 +27,10 @@ include(BBPAPI_PLUGIN_DIR . '/inc/replies.php');
 include(BBPAPI_PLUGIN_DIR . '/inc/topic-tags.php');
 include(BBPAPI_PLUGIN_DIR . '/inc/stats.php');
 
+foreach ( glob( "/inc/*.php" ) as $endpoint) {
+	include $endpoint;
+}
+
 /*
  * Register all routes
 */
