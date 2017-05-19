@@ -102,6 +102,33 @@ class PostReply extends WP_UnitTestCase {
     $this->assertContains( "email", $replyResponse->data["data"]["params"] );
   }
 
+  function testPostReplyBadInput() {
+    //get initial reply on test thread
+    $topicRequest = new WP_REST_Request( "GET",
+      $this->prefix . "/topic/" . $this->newTopic );
+    $topicResponse = $this->server->dispatch( $topicRequest );
+    //POST with bad content
+    $badContentRequest = new WP_REST_Request( "POST",
+      $this->prefix . $this->registeredRoute . "/" . $topicResponse->data["last_reply"] );
+    $badContentRequest->set_body_params( array(
+      "content" => 1234,
+      "email" => $this->user_email,
+    ));
+    $badContentResponse = $this->server->dispatch( $badContentRequest );
+    $this->assertEquals( 400, $badContentResponse->status );
+    $this->assertEquals( "rest_invalid_param", $badContentResponse->data["code"] );
+    //POST with bad email
+    $badEmailRequest = new WP_REST_Request( "POST",
+      $this->prefix . $this->registeredRoute . "/" . $topicResponse->data["last_reply"] );
+    $badEmailRequest->set_body_params( array(
+      "content" => $this->reply_data["content"],
+      "email" => 1234,
+    ));
+    $badEmailResponse = $this->server->dispatch( $badEmailRequest );
+    $this->assertEquals( 400, $badEmailResponse->status );
+    $this->assertEquals( "rest_invalid_param", $badEmailResponse->data["code"] );
+	}
+
 	function tearDown() {
 		parent::tearDown();
 	}

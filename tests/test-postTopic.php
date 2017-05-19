@@ -122,6 +122,59 @@ class PostTopic extends WP_UnitTestCase {
     $this->assertContains( "email", $response->data["data"]["params"] );
   }
 
+  function testPostTopicBadInput() {
+    //POST with bad email
+    $badEmailRequest = new WP_REST_Request( "POST",
+      $this->prefix . $this->registeredRoute );
+    $badEmailRequest->set_body_params( array(
+      "title" => $this->topic_data["title"],
+      "content" => $this->topic_data["content"],
+      "forum_id" => $this->newForum,
+      "email" => 1234,
+    ));
+    $badEmailResponse = $this->server->dispatch( $badEmailRequest );
+    $this->assertEquals( 400, $badEmailResponse->status );
+    $this->assertEquals( "rest_invalid_param", $badEmailResponse->data["code"] );
+
+    //POST with bad title
+    $badTitleRequest = new WP_REST_Request( "POST",
+      $this->prefix . $this->registeredRoute );
+    $badTitleRequest->set_body_params( array(
+      "title" => 1234,
+      "content" => $this->topic_data["content"],
+      "forum_id" => $this->newForum,
+      "email" => $this->user_email,
+    ));
+    $badTitleResponse = $this->server->dispatch( $badTitleRequest );
+    $this->assertEquals( 400, $badTitleResponse->status );
+    $this->assertEquals( "rest_invalid_param", $badTitleResponse->data["code"] );
+
+    //POST with bad content
+    $badContentRequest = new WP_REST_Request( "POST",
+      $this->prefix . $this->registeredRoute );
+    $badContentRequest->set_body_params( array(
+      "title" => $this->topic_data["title"],
+      "content" => 1234,
+      "forum_id" => $this->newForum,
+      "email" => $this->user_email,
+    ));
+    $badContentResponse = $this->server->dispatch( $badContentRequest );
+    $this->assertEquals( 400, $badContentResponse->status );
+    $this->assertEquals( "rest_invalid_param", $badContentResponse->data["code"] );
+
+    //POST with bad forum ID
+    $badForumIdRequest = new WP_REST_Request( "POST",
+      $this->prefix . $this->registeredRoute );
+    $badForumIdRequest->set_body_params( array(
+      "title" => $this->topic_data["title"],
+      "content" => $this->topic_data["content"],
+      "forum_id" => "stringvaluegoeshere",
+      "email" => $this->user_email,
+    ));
+    $badForumIdResponse = $this->server->dispatch( $badForumIdRequest );
+    $this->assertEquals( 400, $badForumIdResponse->status );
+    $this->assertEquals( "rest_invalid_param", $badForumIdResponse->data["code"] );
+  }
 	function tearDown() {
 		parent::tearDown();
 	}
