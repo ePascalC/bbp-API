@@ -36,6 +36,7 @@ class PostTopic extends WP_UnitTestCase {
 	}
 
   function testPostTopic() {
+    //post new topic
     $request = new WP_REST_Request("POST", $this->prefix . $this->registeredRoute);
     $request->set_body_params( array(
       "title" => $this->topic_data["title"],
@@ -43,9 +44,14 @@ class PostTopic extends WP_UnitTestCase {
       "forum_id" => $this->newForum,
       "email" => $this->user_email,
     ));
-    //print_r($request);
     $response = $this->server->dispatch( $request );
-    print_r($response);
+    $this->assertEquals(200, $response->status);
+    //check content tied to new topic
+    $replyRequest = new WP_REST_Request("GET", $this->prefix . "/reply/" . $response->data);
+    $replyResponse = $this->server->dispatch( $replyRequest );
+    $this->assertEquals(200, $response->status);
+    $this->assertEquals($this->topic_data["title"], $replyResponse->data["title"]);
+    $this->assertEquals($this->topic_data["content"], $replyResponse->data["content"]);
   }
 
 	function tearDown() {

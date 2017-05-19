@@ -59,7 +59,6 @@ function bbp_api_topics_post($data) {
 	$all_topic_data['email'] = $data['email'];
 
 	$myuser = get_user_by("email", $data['email']);
-	print_r($myuser);
 	$reply_id = bbp_insert_topic(
     array(
 			'post_parent'  => $all_topic_data['forum_id'],

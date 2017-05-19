@@ -51,10 +51,8 @@ class GetTopic extends WP_UnitTestCase {
     foreach ($this->registeredRoutes as &$route) {
       $request = new WP_REST_Request("GET", $this->prefix . $route . "/" . $this->newTopic);
       $response = $this->server->dispatch( $request );
-      //print_r($response);
       $this->assertEquals(200, $response->status);
       $this->assertEquals($this->topic_data["title"], $response->data["title"]);
-      //$this->assertEquals($this->topic_data[""], $response->data["content"]);
     }
   }
 
