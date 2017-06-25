@@ -12,29 +12,23 @@ function bbp_api_replies_info( $reply_id ) {
 		$all_reply_data['forum_id'] = bbp_get_topic_forum_id( $all_reply_data['topic_id'] );
 		$all_reply_data['tags'] = bbp_get_topic_tag_list( $all_reply_data['topic_id'], array ('before' => '') );
 		$all_reply_data['content'] = bbp_get_reply_content( $reply_id );
-
-
 	}
 	if ( empty( $all_reply_data ) ) {
 		return null;
 	}
 	return $all_reply_data;
 }
-
 /*
  * /bbp-api/replies
 */
 function bbp_api_replies() {
 	// Prepared for future use
 	$all_replies_data = array();
-
 	if ( empty( $all_replies_data ) ) {
 		return null;
 	}
-
 	return $all_replies_data;
 }
-
 /*
  * /bbp-api/replies/<id>
 */
@@ -42,7 +36,6 @@ function bbp_api_replies_one( $data ) {
 	$all_reply_data = bbp_api_replies_info( $data['id'] );
 	return $all_reply_data;
 }
-
 /*
  * Setting up POST for new replies via API.
  * Example code in BBPress here: includes/core/update.php
@@ -56,7 +49,6 @@ function bbp_api_replies_post( $data ) {
 	$all_reply_data = bbp_api_replies_info( $data['id'] );
 	$all_reply_data['content'] = $data['content'];
 	$all_reply_data['email'] = $data['email'];
-
 	$myuser = get_user_by( "email", $data['email'] );
 	$reply_id = bbp_insert_reply(
     array(
