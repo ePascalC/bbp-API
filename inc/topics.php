@@ -12,37 +12,30 @@ function bbp_api_topics_info( $topic_id, $scope="public" ) {
 		$all_topic_data['tags'] = bbp_get_topic_tag_list( $topic_id,
 			array ('before' => '') );
 		$all_topic_data['last_reply'] = bbp_get_topic_last_reply_id( $topic_id );
-
 	}
 	if ( empty( $all_topic_data ) ) {
 		return null;
 	}
 	return $all_topic_data;
 }
-
 /*
  * /bbp-api/topics
 */
 function bbp_api_topics() {
 	// Prepared for future use
 	$all_topic_data = array();
-
 	if ( empty( $all_topic_data ) ) {
 		return null;
 	}
-
 	return $all_topic_data;
 }
-
 /*
  * /bbp-api/topics/<id>
 */
 function bbp_api_topics_one( $data ) {
 	$all_topic_data = bbp_api_topics_info( $data['id'] );
-
 	return $all_topic_data;
 }
-
 /*
  * Setting up POST for new topics via API.
  * Example code in BBPress here: includes/core/update.php
@@ -58,7 +51,6 @@ function bbp_api_topics_post( $data ) {
 	$all_topic_data['title'] = $data['title'];
 	$all_topic_data['forum_id'] = $data['forum_id'];
 	$all_topic_data['email'] = $data['email'];
-
 	$myuser = get_user_by( "email", $data['email'] );
 	$reply_id = bbp_insert_topic(
     array(
