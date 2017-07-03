@@ -36,11 +36,18 @@ function bbp_api_forums() {
 }
 /*
  * /bbp-api/forums/<id>
+ *
+ * per_page and page are following https://developer.wordpress.org/rest-api/using-the-rest-api/pagination/#pagination-parameters
+ * including the 100 maximum records
 */
 function bbp_api_forums_one( $data ) {
 	$all_forum_data = array();
 	$forum_id = bbp_get_forum_id( $data['id'] );
 	if ($forum_id) {
+		$per_page = !isset($_GET['per_page']) ? 20 : $_GET['per_page'];
+		if ($per_page > 100) $per_page = 100;
+		$page = !isset($_GET['page']) ? 1 : $_GET['page'];
+
 		$all_forum_data['id'] = $forum_id;
 		$all_forum_data['title'] = bbp_get_forum_title( $forum_id );
 		$all_forum_data['parent'] = bbp_get_forum_parent_id( $forum_id );
@@ -58,11 +65,21 @@ function bbp_api_forums_one( $data ) {
 			$all_forum_data['subforums'][$i]['topic_count'] = bbp_get_forum_topic_count( $subforum_id );
 			$all_forum_data['subforums'][$i]['reply_count'] = bbp_get_forum_reply_count( $subforum_id );
 			$all_forum_data['subforums'][$i]['permalink'] = bbp_get_forum_permalink( $subforum_id );
+			$all_forum_data['subforums'][$i]['content'] = bbp_get_forum_content( $subforum_id );
 			$all_forum_data['subforums'][$i]['type'] = bbp_get_forum_type( $subforum_id );
 			$i++;
 		}
+		
+		if ( ( $per_page * $page ) > $all_forum_data['topic_count'] ) {
+			// This is the last page
+			$all_forum_data['next_page'] = 0;
+		} else {
+			$all_forum_data['next_page'] = $page + 1;
+			$all_forum_data['next_page_url'] = get_site_url() . '/wp-json/bbp-api/v1/forums' . $forum_id . '?page=' . $all_forum_data['next_page'] . '&per_page=' . $per_page;
+		}
+		
 		$i = 0;
-		if ( bbp_has_topics ( array( 'orderby' => 'date', 'order' => 'DESC', 'posts_per_page' => 20, 'post_parent' => $forum_id ) ) );
+		if ( bbp_has_topics ( array( 'orderby' => 'date', 'order' => 'DESC', 'posts_per_page' => $per_page, 'paged' => $page, 'post_parent' => $forum_id ) ) );
 		while ( bbp_topics() ) : bbp_the_topic();
 			$topic_id = bbp_get_topic_id();
 			$all_forum_data['topics'][$i]['id'] = $topic_id;
