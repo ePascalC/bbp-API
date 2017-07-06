@@ -6,14 +6,14 @@ Plugin URI: https://wordpress.org/plugins/bbp-api/
 Author: Pascal Casier
 Author URI: http://casier.eu/wp-dev/
 Text Domain: bbp-api
-Version: 1.0.5
+Version: 1.0.6
 License: GPL2
 */
 
 // No direct access
 if ( !defined( 'ABSPATH' ) ) exit;
 
-define ('BBPAPI_VERSION' , '1.0.5');
+define ('BBPAPI_VERSION' , '1.0.6');
 
 if(!defined('BBPAPI_PLUGIN_DIR'))
 	define('BBPAPI_PLUGIN_DIR', dirname(__FILE__));
@@ -42,24 +42,8 @@ add_action( 'rest_api_init', function () {
 	// FORUM One specific forum with meta data and topics
 	$args = array(
 		array(
-		'methods' => WP_REST_Server::READABLE,
-		'callback' => 'bbp_api_forums_one',
-		),
-		array(
-			'methods' => WP_REST_Server::CREATABLE,
-			'callback' => 'bbp_api_forums_post',
-		),
-	);
-	// register both forum-slug as well as /forums
-	register_rest_route( 'bbp-api/v1', '/' . bbp_get_forum_slug() . '/(?P<id>\d+)', $args );
-	if ( bbp_get_forum_slug() != 'forums' )
-		register_rest_route( 'bbp-api/v1', '/forums/(?P<id>\d+)', $args );
-	
-	// TOPICS
-	$args = array(
-		array(
 			'methods' => WP_REST_Server::READABLE,
-			'callback' => 'bbp_api_topics',
+			'callback' => 'bbp_api_forums_one',
 		),
 		array(
 			'args' => array(
@@ -73,11 +57,6 @@ add_action( 'rest_api_init', function () {
 					'description' => 'Title for the new topic.',
 					'type' => 'string',
 				),
-				'forum_id' => array(
-					'required' => True,
-					'description' => 'ID of the forum to create the new topic within.',
-					'type' => 'integer',
-				),
 				'email' => array(
 					'required' => True,
 					'description' => 'Email address of the thread author.',
@@ -85,7 +64,19 @@ add_action( 'rest_api_init', function () {
 				),
 			),
 			'methods' => WP_REST_Server::CREATABLE,
-			'callback' => 'bbp_api_topics_post',
+			'callback' => 'bbp_api_newtopic_post',
+		),
+	);
+	// register both forum-slug as well as /forums
+	register_rest_route( 'bbp-api/v1', '/' . bbp_get_forum_slug() . '/(?P<id>\d+)', $args );
+	if ( bbp_get_forum_slug() != 'forums' )
+		register_rest_route( 'bbp-api/v1', '/forums/(?P<id>\d+)', $args );
+	
+	// TOPICS
+	$args = array(
+		array(
+			'methods' => WP_REST_Server::READABLE,
+			'callback' => 'bbp_api_topics',
 		),
 	);
 	// register both topic-slug as well as /topics
@@ -94,9 +85,28 @@ add_action( 'rest_api_init', function () {
 		register_rest_route( 'bbp-api/v1', '/topics/', $args );
 	
 	// TOPIC One specific topic with meta data and replies
+	// The POST request is for a reply to this topic
 	$args = array(
+		array(
 			'methods' => WP_REST_Server::READABLE,
 			'callback' => 'bbp_api_topics_one',
+		),
+		array(
+			'args' => array(
+				'content' => array(
+					'required' => True,
+					'description' => 'Content for the reply.',
+					'type' => 'string',
+				),
+				'email' => array(
+					'required' => True,
+					'description' => 'Email address of the reply author.',
+					'type' => 'string',
+				),
+			),
+			'methods' => WP_REST_Server::CREATABLE,
+			'callback' => 'bbp_api_replytotopic_post',
+		),
 	);
 	register_rest_route( 'bbp-api/v1', '/' . bbp_get_topic_slug() . '/(?P<id>\d+)', $args );
 	if ( bbp_get_topic_slug() != 'topics' )
@@ -133,7 +143,7 @@ add_action( 'rest_api_init', function () {
 				),
 			),
 			'methods' => WP_REST_Server::CREATABLE,
-			'callback' => 'bbp_api_replies_post',
+			'callback' => 'bbp_api_replytoreply_post',
 		),
 	);
 	// register both reply-slug as well as /replies
