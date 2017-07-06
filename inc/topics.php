@@ -209,6 +209,11 @@ function bbp_api_topics_post( $data ) {
 
 	$reply['content'] = bbp_get_reply_content( $reply_id );
 
+	$reply['reply_count'] = bbp_get_topic_reply_count( $reply_id );
+
+	$reply['voice_count'] = bbp_get_topic_voice_count( $reply_id );
+
+
 	return new WP_REST_Response($reply, 200);  
 
 	return $reply_id;
