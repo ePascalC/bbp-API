@@ -152,4 +152,93 @@ add_action( 'rest_api_init', function () {
 		'methods' => WP_REST_Server::READABLE,
 		'callback' => 'bbp_api_stats',
 	) );
+
+	// SUBSCRIBE 
+	$args = array(
+		array(
+			'args' => array(
+				'forum_id' => array(
+					'required' => True,
+					'description' => 'ID of the forum.',
+					'type' => 'integer',
+				),
+				'user_id' => array(
+					'required' => True,
+					'description' => 'ID of the user.',
+					'type' => 'integer',
+				),
+			),
+			'methods' => WP_REST_Server::CREATABLE,
+			'callback' => 'bbp_api_subscribe_forum',
+		),
+	);
+	// register /forum/subscribe
+	register_rest_route( 'bbp-api/v1', '/forum/subscribe/', $args );
+	
+	
+	$args = array(
+		array(
+			'args' => array(
+				'topic_id' => array(
+					'required' => True,
+					'description' => 'ID of the topic.',
+					'type' => 'integer',
+				),
+				'user_id' => array(
+					'required' => True,
+					'description' => 'ID of the user.',
+					'type' => 'integer',
+				),
+			),
+			'methods' => WP_REST_Server::CREATABLE,
+			'callback' => 'bbp_api_subscribe_topic',
+		),
+	);
+	// register /topic/subscribe
+	register_rest_route( 'bbp-api/v1', '/topic/subscribe/', $args );
+	
+	// UNSUBSCRIBE 
+	$args = array(
+		array(
+			'args' => array(
+				'forum_id' => array(
+					'required' => True,
+					'description' => 'ID of the forum.',
+					'type' => 'integer',
+				),
+				'user_id' => array(
+					'required' => True,
+					'description' => 'ID of the user.',
+					'type' => 'integer',
+				),
+			),
+			'methods' => WP_REST_Server::CREATABLE,
+			'callback' => 'bbp_api_unsubscribe_forum',
+		),
+	);
+	// register /forum/unsubscribe
+	register_rest_route( 'bbp-api/v1', '/forum/unsubscribe/', $args );
+	
+	
+	$args = array(
+		array(
+			'args' => array(
+				'topic_id' => array(
+					'required' => True,
+					'description' => 'ID of the topic.',
+					'type' => 'integer',
+				),
+				'user_id' => array(
+					'required' => True,
+					'description' => 'ID of the user.',
+					'type' => 'integer',
+				),
+			),
+			'methods' => WP_REST_Server::CREATABLE,
+			'callback' => 'bbp_api_unsubscribe_topic',
+		),
+	);
+	// register /topic/unsubscribe
+	register_rest_route( 'bbp-api/v1', '/topic/unsubscribe/', $args );
+	
 } );

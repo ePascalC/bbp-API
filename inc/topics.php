@@ -46,7 +46,9 @@ function bbp_api_topics_one( $data ) {
 
 		$page = !isset($_GET['page']) ? 1 : $_GET['page'];
 
+		// $user_id = $_GET['user_id'];
 
+		// $all_topic_data['subscribed'] = bbp_is_user_subscribed_to_topic (  $user_id,  $topic_id);
 
 		$all_topic_data['id'] = $topic_id;
 
