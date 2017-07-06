@@ -43,7 +43,9 @@ function bbp_api_forums() {
 function bbp_api_forums_one( $data ) {
 	$all_forum_data = array();
 	$forum_id = bbp_get_forum_id( $data['id'] );
-	if ($forum_id) {
+	if (!bbp_is_forum($forum_id)) {
+		return new WP_Error( 'error', 'Parameter value ' . $data['id'] . ' is not an ID of a forum', array( 'status' => 404 ) );
+	} else {
 		$per_page = !isset($_GET['per_page']) ? 20 : $_GET['per_page'];
 		if ($per_page > 100) $per_page = 100;
 		$page = !isset($_GET['page']) ? 1 : $_GET['page'];
@@ -75,7 +77,7 @@ function bbp_api_forums_one( $data ) {
 			$all_forum_data['next_page'] = 0;
 		} else {
 			$all_forum_data['next_page'] = $page + 1;
-			$all_forum_data['next_page_url'] = get_site_url() . '/wp-json/bbp-api/v1/forums' . $forum_id . '?page=' . $all_forum_data['next_page'] . '&per_page=' . $per_page;
+			$all_forum_data['next_page_url'] = get_site_url() . '/wp-json/bbp-api/v1/forums/' . $forum_id . '?page=' . $all_forum_data['next_page'] . '&per_page=' . $per_page;
 		}
 		
 		$i = 0;
