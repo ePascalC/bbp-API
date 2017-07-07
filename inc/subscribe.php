@@ -2,14 +2,14 @@
 /**
 
 	Routes:
-	- /bbp-api/subscribe/forum
-	- /bbp-api/unsubscribe/forum
+	- /bbp-api/forum/subscribe
+	- /bbp-api/forum/unsubscribe
 		Params:
 		- user_id 
 		- forum_id
 
-	- /bbp-api/subscribe/topic
-	- /bbp-api/unsubscribe/topic
+	- /bbp-api/topic/subscribe
+	- /bbp-api/topic/unsubscribe
 		Params:
 		- user_id 
 		- topic_id
@@ -17,7 +17,7 @@
 
 /*
 	POST
- * /bbp-api/subscribe/forum
+ * /bbp-api/forum/subscribe
 
 */
 
@@ -37,7 +37,7 @@ function bbp_api_subscribe_forum ($data){
 
 /*
 	POST
- * /bbp-api/subscribe/topic
+ * /bbp-api/topic/subscribe
 
 */
 
@@ -58,7 +58,7 @@ function bbp_api_subscribe_topic ($data){
 
 /*
 	POST
- * /bbp-api/unsubscribe/forum
+ * /bbp-api/forum/unsubscribe
 
 */
 
@@ -78,7 +78,7 @@ function bbp_api_unsubscribe_forum ($data){
 
 /*
 	POST
- * /bbp-api/unsubscribe/topic
+ * /bbp-api/topic/unsubscribe
 
 */
 
