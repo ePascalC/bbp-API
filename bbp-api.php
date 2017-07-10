@@ -6,14 +6,14 @@ Plugin URI: https://wordpress.org/plugins/bbp-api/
 Author: Pascal Casier
 Author URI: http://casier.eu/wp-dev/
 Text Domain: bbp-api
-Version: 1.0.6
+Version: 1.0.10
 License: GPL2
 */
 
 // No direct access
 if ( !defined( 'ABSPATH' ) ) exit;
 
-define ('BBPAPI_VERSION' , '1.0.6');
+define ('BBPAPI_VERSION' , '1.0.10');
 
 if(!defined('BBPAPI_PLUGIN_DIR'))
 	define('BBPAPI_PLUGIN_DIR', dirname(__FILE__));
@@ -28,7 +28,7 @@ foreach ( glob( BBPAPI_PLUGIN_DIR . "/inc/*.php" ) as $endpoint) {
  * Register all routes
 */
 
-add_action( 'rest_api_init', function () {
+add_action( 'rest_api_init', function() {
 	// FORUMS LIST
 	$args = array(
 		'methods' => WP_REST_Server::READABLE,
@@ -47,6 +47,11 @@ add_action( 'rest_api_init', function () {
 		),
 		array(
 			'args' => array(
+				'id' => array(
+					'validate_callback' => function( $param, $request, $key ) {
+						return is_numeric( $param );
+					}
+				),
 				'content' => array(
 					'required' => True,
 					'description' => 'Content for the initial post in the new topic.',
@@ -93,6 +98,11 @@ add_action( 'rest_api_init', function () {
 		),
 		array(
 			'args' => array(
+				'id' => array(
+					'validate_callback' => function( $param, $request, $key ) {
+						return is_numeric( $param );
+					}
+				),
 				'content' => array(
 					'required' => True,
 					'description' => 'Content for the reply.',
@@ -131,6 +141,11 @@ add_action( 'rest_api_init', function () {
 		),
 		array(
 			'args' => array(
+				'id' => array(
+					'validate_callback' => function( $param, $request, $key ) {
+						return is_numeric( $param );
+					}
+				),
 				'content' => array(
 					'required' => True,
 					'description' => 'Content for the reply.',
@@ -150,12 +165,16 @@ add_action( 'rest_api_init', function () {
 	register_rest_route( 'bbp-api/v1', '/' . bbp_get_reply_slug() . '/(?P<id>\d+)', $args );
 	if ( bbp_get_reply_slug() != 'replies' )
 		register_rest_route( 'bbp-api/v1', '/replies/(?P<id>\d+)', $args );
-	
+
 	// TOPICTAGS
-	register_rest_route( 'bbp-api/v1', '/' . bbp_get_topic_tag_tax_slug() . '/', array(
+	$args = array(
 		'methods' => WP_REST_Server::READABLE,
 		'callback' => 'bbp_api_topic_tags',
-	) );
+	);
+	// register both reply-slug as well as /replies
+	register_rest_route( 'bbp-api/v1', '/' . bbp_get_topic_tag_tax_slug() . '/', $args );
+	if ( bbp_get_reply_slug() != 'topic-tags' )
+		register_rest_route( 'bbp-api/v1', '/topic-tags/', $args );
 	
 	// STATS
 	register_rest_route( 'bbp-api/v1', '/stats/', array(
