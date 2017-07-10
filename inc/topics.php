@@ -18,6 +18,9 @@ function bbp_api_topics() {
 function bbp_api_topics_one( $data ) {
 	$all_topic_data = array();
 	$topic_id = bbp_get_topic_id( $data['id'] );
+	if ( $topic_id == 0 ) {
+		return new WP_Error( 'error', 'Parameter value of ID for a topic should not be 0', array( 'status' => 404 ) );
+	}
 	if ( !bbp_is_topic( $topic_id ) ) {
 		return new WP_Error( 'error', 'Parameter value ' . $data['id'] . ' is not an ID of a topic', array( 'status' => 404 ) );
 	} else {
@@ -81,28 +84,41 @@ function bbp_api_topics_one( $data ) {
  * return string reply_id: id number for accepted post
 */
 function bbp_api_newtopic_post( $data ) {
+	$return = array();
 	//required fields in POST data
 	$forum_id = bbp_get_forum_id( $data['id'] );
+	if ( $forum_id == 0 ) {
+		return new WP_Error( 'error', 'Parameter value of ID for a forum should not be 0', array( 'status' => 404 ) );
+	}
 	if (!bbp_is_forum($forum_id)) {
 		return new WP_Error( 'error', 'Parameter value ' . $data['id'] . ' is not an ID of a forum', array( 'status' => 404 ) );
-	} else {	
-		$content = $data['content'];
-		$title = $data['title'];
-		$email = $data['email'];
-		$myuser = get_user_by( "email", $data['email'] );
-		$reply_id = bbp_insert_topic(
-			array(
-				'post_parent'  => $forum_id,
-				'post_title'   => $title,
-				'post_content' => $content,
-				'post_author'  => $myuser->ID,
-			),
-			array(
-				'forum_id'     => $forum_id,
-			)
-		);
-		return $reply_id;
 	}
+	if (bbp_is_forum_category($forum_id)) {
+		return new WP_Error( 'error', 'Forum with ID ' . $data['id'] . ' is a category, so no topics allowed', array( 'status' => 404 ) );
+	}
+	
+	$content = $data['content'];
+	$title = $data['title'];
+	$email = $data['email'];
+	$myuser = get_user_by( "email", $data['email'] );
+	$author_id = $myuser->ID;
+	$new_topic_id = bbp_insert_topic(
+		array(
+			'post_parent'  => $forum_id,
+			'post_title'   => $title,
+			'post_content' => $content,
+			'post_author'  => $author_id,
+		),
+		array(
+			'forum_id'     => $forum_id,
+		)
+	);
+	
+	$return['id'] = $new_topic_id;
+	$return['forum_id'] = $forum_id;
+	$return['author_id'] = $author_id;
+	
+	return $return;
 }
 
 /*
@@ -112,28 +128,37 @@ function bbp_api_newtopic_post( $data ) {
  * return string reply_id: id number for accepted post
 */
 function bbp_api_replytotopic_post( $data ) {
+	$return = array();
+
 	//required fields in POST data
 	$topic_id = bbp_get_topic_id( $data['id'] );
 	if ( !bbp_is_topic( $topic_id ) ) {
 		return new WP_Error( 'error', 'Parameter value ' . $data['id'] . ' is not an ID of a topic', array( 'status' => 404 ) );
-	} else {
-		$forum_id = bbp_get_topic_forum_id( $topic_id );
-		$title = 'RE: ' . bbp_get_topic_title( $topic_id );
-		$content = $data['content'];
-		$email = $data['email'];
-		$myuser = get_user_by( "email", $email );
-		$reply_id = bbp_insert_reply(
-			array(
-				'post_parent'  => $forum_id,
-				'post_title'   => $title,
-				'post_content' => $content,
-				'post_author'  => $myuser->ID,
-			),
-			array(
-				'forum_id'     => $forum_id,
-				'topic_id'     => $topic_id,
-			)
-		);
-		return $reply_id;
 	}
+	
+	$forum_id = bbp_get_topic_forum_id( $topic_id );
+	$title = 'RE: ' . bbp_get_topic_title( $topic_id );
+	$content = $data['content'];
+	$email = $data['email'];
+	$myuser = get_user_by( "email", $email );
+	$author_id = $myuser->ID;
+	$new_reply_id = bbp_insert_reply(
+		array(
+			'post_parent'  => $topic_id,
+			'post_title'   => $title,
+			'post_content' => $content,
+			'post_author'  => $author_id,
+		),
+		array(
+			'forum_id'     => $forum_id,
+			'topic_id'     => $topic_id,
+		)
+	);
+	
+	$return['id'] = $new_reply_id;
+	$return['topic_id'] = $topic_id;
+	$return['forum_id'] = $forum_id;
+	$return['author_id'] = $author_id;
+	
+	return $return;
 }
