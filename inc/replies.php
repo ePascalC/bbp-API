@@ -7,9 +7,6 @@ function bbp_api_replies() {
 	$all_replies_data = array();
 	$all_replies_data['text'] = 'No data to deliver yet using this route. To see replies, refer to documentation and use /topics/ID.';
 
-	if ( empty( $all_replies_data ) ) {
-		return null;
-	}
 	return $all_replies_data;
 }
 /*
@@ -35,9 +32,7 @@ function bbp_api_replies_one( $data ) {
 		$all_reply_data['content'] = bbp_get_reply_content( $reply_id );
 
 	}
-	if ( empty( $all_reply_data ) ) {
-		return null;
-	}
+
 	return $all_reply_data;
 }
 /*
@@ -76,7 +71,7 @@ function bbp_api_replytoreply_post( $data ) {
 		array(
 			'forum_id'     => $forum_id,
 			'topic_id'     => $topic_id,
-			'reply_id'     => $reply_id,
+			'reply_to'     => $reply_id,
 		)
 	);
 	

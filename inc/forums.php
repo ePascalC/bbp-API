@@ -42,13 +42,15 @@ function bbp_api_forums() {
 */
 function bbp_api_forums_one( $data ) {
 	$all_forum_data = array();
+	$bbp = bbpress();
+
 	$forum_id = bbp_get_forum_id( $data['id'] );
 	if (!bbp_is_forum($forum_id)) {
 		return new WP_Error( 'error', 'Parameter value ' . $data['id'] . ' is not an ID of a forum', array( 'status' => 404 ) );
 	} else {
-		$per_page = !isset($_GET['per_page']) ? 20 : $_GET['per_page'];
+		$per_page = !isset($_GET['per_page']) ? 20 : (int)$_GET['per_page'];
 		if ($per_page > 100) $per_page = 100;
-		$page = !isset($_GET['page']) ? 1 : $_GET['page'];
+		$page = !isset($_GET['page']) ? 1 : (int)$_GET['page'];
 
 		$all_forum_data['id'] = $forum_id;
 		$all_forum_data['title'] = bbp_get_forum_title( $forum_id );
@@ -72,27 +74,46 @@ function bbp_api_forums_one( $data ) {
 			$i++;
 		}
 		
-		if ( ( $per_page * $page ) > $all_forum_data['topic_count'] ) {
-			// This is the last page
-			$all_forum_data['next_page'] = 0;
-		} else {
-			$all_forum_data['next_page'] = $page + 1;
-			$all_forum_data['next_page_url'] = get_site_url() . '/wp-json/bbp-api/v1/forums/' . $forum_id . '?page=' . $all_forum_data['next_page'] . '&per_page=' . $per_page;
-		}
-		
 		$i = 0;
-		if ( bbp_has_topics ( array( 'orderby' => 'date', 'order' => 'DESC', 'posts_per_page' => $per_page, 'paged' => $page, 'post_parent' => $forum_id ) ) );
-		while ( bbp_topics() ) : bbp_the_topic();
-			$topic_id = bbp_get_topic_id();
-			$all_forum_data['topics'][$i]['id'] = $topic_id;
-			$all_forum_data['topics'][$i]['title'] = bbp_get_topic_title( $topic_id );
-			$all_forum_data['topics'][$i]['reply_count'] = bbp_get_topic_reply_count( $topic_id );
-			$all_forum_data['topics'][$i]['permalink'] = bbp_get_topic_permalink( $topic_id );
-			$all_forum_data['topics'][$i]['author_name'] = bbp_get_topic_author_display_name( $topic_id );
-			$all_forum_data['topics'][$i]['author_avatar'] = bbp_get_topic_author_avatar( $topic_id );
-			$all_forum_data['topics'][$i]['post_date'] = bbp_get_topic_post_date( $topic_id );
-			$i++;
-		endwhile;
+		$all_forum_data['total_topics'] = 0;
+		$all_forum_data['total_pages'] = 0;
+		$all_forum_data['current_page'] = 0;
+		$all_forum_data['next_page'] = 0;
+		$all_forum_data['next_page_url'] = '';
+		$all_forum_data['prev_page'] = 0;
+		$all_forum_data['prev_page_url'] = '';
+		
+		if ( bbp_has_topics ( array( 'orderby' => 'date', 'order' => 'DESC', 'posts_per_page' => $per_page, 'paged' => $page, 'post_parent' => $forum_id ) ) ) {
+			$all_forum_data['current_page'] = $page;
+			$all_forum_data['total_topics'] = (int)$bbp->topic_query->found_posts;
+			$all_forum_data['total_pages'] = ceil($all_forum_data['total_topics'] / $per_page);
+
+			$root_url = get_site_url() . '/wp-json/bbp-api/v1/forums/' . $forum_id;			
+			
+			if ( ( $per_page * $page ) >= $all_forum_data['total_topics'] ) {
+				// This is the last page
+			} else {
+				// Not the last page
+				$all_forum_data['next_page'] = $page + 1;
+				$all_forum_data['next_page_url'] = $root_url . '?page=' . $all_forum_data['next_page'] . '&per_page=' . $per_page;
+			}
+			if ( $page > 1 ) {
+				// Other page than first
+				$all_forum_data['prev_page'] = $page - 1;
+				$all_forum_data['prev_page_url'] = $root_url . '?page=' . $all_forum_data['prev_page'] . '&per_page=' . $per_page;
+			}
+			while ( bbp_topics() ) : bbp_the_topic();
+				$topic_id = bbp_get_topic_id();
+				$all_forum_data['topics'][$i]['id'] = $topic_id;
+				$all_forum_data['topics'][$i]['title'] = bbp_get_topic_title( $topic_id );
+				$all_forum_data['topics'][$i]['reply_count'] = bbp_get_topic_reply_count( $topic_id );
+				$all_forum_data['topics'][$i]['permalink'] = bbp_get_topic_permalink( $topic_id );
+				$all_forum_data['topics'][$i]['author_name'] = bbp_get_topic_author_display_name( $topic_id );
+				$all_forum_data['topics'][$i]['author_avatar'] = bbp_get_topic_author_avatar( $topic_id );
+				$all_forum_data['topics'][$i]['post_date'] = bbp_get_topic_post_date( $topic_id );
+				$i++;
+			endwhile;
+		}
 	}
 	if ( empty( $all_forum_data ) ) {
 		return null;
