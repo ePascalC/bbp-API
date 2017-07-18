@@ -6,14 +6,14 @@ Plugin URI: https://wordpress.org/plugins/bbp-api/
 Author: Pascal Casier
 Author URI: http://casier.eu/wp-dev/
 Text Domain: bbp-api
-Version: 1.0.10
+Version: 1.0.13
 License: GPL2
 */
 
 // No direct access
 if ( !defined( 'ABSPATH' ) ) exit;
 
-define ('BBPAPI_VERSION' , '1.0.10');
+define ('BBPAPI_VERSION' , '1.0.13');
 
 if(!defined('BBPAPI_PLUGIN_DIR'))
 	define('BBPAPI_PLUGIN_DIR', dirname(__FILE__));

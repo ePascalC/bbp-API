@@ -4,7 +4,7 @@ Donate link: http://casier.eu/wp-dev/
 Tags: bbpress,api,rest,rest api
 Requires at least: 4.7
 Tested up to: 4.8
-Stable tag: 1.0.9
+Stable tag: 1.0.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,6 +19,7 @@ Current routes for READING (GET):
 
 * /wp-json/bbp-api/v1/forums/       (list all forums)
 * /wp-json/bbp-api/v1/forums/*id*   (includes latest topics and subforums)
+* /wp-json/bbp-api/v1/topics/       (latest topics from all forums)
 * /wp-json/bbp-api/v1/topics/*id*   (includes latest replies)
 * /wp-json/bbp-api/v1/replies/*id*  (show one reply)
 * /wp-json/bbp-api/v1/topic-tags/
@@ -71,6 +72,21 @@ Of course ! Just post something on the support tab
 Thanks. Please leave a review or donate 1 or 2 EUR/USD for a coffee.
 
 == Changelog ==
+= 1.0.13 =
+* Fixing https://github.com/ePascalC/bbp-API/issues/22
+
+= 1.0.12 =
+* Add previous page (=0) even if there is none
+* Add current page
+ 
+= 1.0.11 =
+* Latest topics pagination
+* Previous page, total pages and total items added for every loop
+* Fix issue where next page would not be specified 
+
+= 1.0.10 =
+* Latest topics from all visible forums
+
 = 1.0.9 =
 * If a forum is a category, do not allow a new topic on POST
 * Fix reply to reply POST issue
