@@ -78,6 +78,7 @@ function bbp_api_forums_one( $data ) {
 		$all_forum_data['total_topics'] = 0;
 		$all_forum_data['total_pages'] = 0;
 		$all_forum_data['current_page'] = 0;
+		$all_forum_data['per_page'] = 0;
 		$all_forum_data['next_page'] = 0;
 		$all_forum_data['next_page_url'] = '';
 		$all_forum_data['prev_page'] = 0;
@@ -85,6 +86,7 @@ function bbp_api_forums_one( $data ) {
 		
 		if ( bbp_has_topics ( array( 'orderby' => 'date', 'order' => 'DESC', 'posts_per_page' => $per_page, 'paged' => $page, 'post_parent' => $forum_id ) ) ) {
 			$all_forum_data['current_page'] = $page;
+			$all_forum_data['per_page'] = $per_page;
 			$all_forum_data['total_topics'] = (int)$bbp->topic_query->found_posts;
 			$all_forum_data['total_pages'] = ceil($all_forum_data['total_topics'] / $per_page);
 

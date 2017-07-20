@@ -14,6 +14,7 @@ function bbp_api_topics() {
 	$all_topic_data['total_topics'] = 0;
 	$all_topic_data['total_pages'] = 0;
 	$all_topic_data['current_page'] = 0;
+	$all_topic_data['per_page'] = 0;
 	$all_topic_data['next_page'] = 0;
 	$all_topic_data['next_page_url'] = '';
 	$all_topic_data['prev_page'] = 0;
@@ -21,6 +22,7 @@ function bbp_api_topics() {
 
 	if ( bbp_has_topics ( array( 'orderby' => 'date', 'order' => 'DESC', 'posts_per_page' => $per_page, 'paged' => $page ) ) ) {
 		$all_topic_data['current_page'] = $page;
+		$all_topic_data['per_page'] = $per_page;
 		$all_topic_data['total_topics'] = (int)$bbp->topic_query->found_posts;
 		$all_topic_data['total_pages'] = ceil($all_topic_data['total_topics'] / $per_page);
 
@@ -106,6 +108,7 @@ function bbp_api_topics_one( $data ) {
 		$all_topic_data['total_topics'] = 0;
 		$all_topic_data['total_pages'] = 0;
 		$all_topic_data['current_page'] = 0;
+		$all_topic_data['per_page'] = 0;
 		$all_topic_data['next_page'] = 0;
 		$all_topic_data['next_page_url'] = '';
 		$all_topic_data['prev_page'] = 0;
@@ -113,10 +116,11 @@ function bbp_api_topics_one( $data ) {
 
 		if ( bbp_has_replies ( array( 'orderby' => 'date', 'order' => 'DESC', 'posts_per_page' => $per_page, 'paged' => $page, 'post_parent' => $topic_id ) ) ) {
 			$all_topic_data['current_page'] = $page;
-			$all_topic_data['total_replies'] = (int)$bbp->reply_query->found_posts;
+			$all_topic_data['per_page'] = $per_page;
+			$all_topic_data['total_replies'] = (int)$bbp->reply_query->found_posts - 1; // Remove the topic that comes as first reply
 			$all_topic_data['total_pages'] = ceil($all_topic_data['total_replies'] / $per_page);
-		
-			if ( ( $per_page * $page ) > $all_topic_data['total_replies'] ) {
+
+			if ( ( $per_page * $page ) >= $all_topic_data['total_replies'] ) {
 				// This is the last page
 			} else {
 				// Not the last page
@@ -131,13 +135,14 @@ function bbp_api_topics_one( $data ) {
 			while ( bbp_replies() ) : bbp_the_reply();
 				$reply_id = bbp_get_reply_id();
 				if ( $reply_id != $topic_id ) {
-					// not sure why in the list the topic is seen as a reply too, so this 'if' should remove it
+					// The first reply is the topic itself, so this 'if' removes it
 					$all_topic_data['replies'][$i]['id'] = $reply_id;
 					$all_topic_data['replies'][$i]['title'] = bbp_get_reply_title( $reply_id );
 					$all_topic_data['replies'][$i]['permalink'] = bbp_get_reply_permalink( $reply_id );
 					$all_topic_data['replies'][$i]['author_name'] = bbp_get_reply_author_display_name( $reply_id );
 					$all_topic_data['replies'][$i]['author_avatar'] = bbp_get_reply_author_avatar( $reply_id );
 					$all_topic_data['replies'][$i]['post_date'] = bbp_get_reply_post_date( $reply_id );
+					$all_topic_data['replies'][$i]['reply_to'] = bbp_get_reply_to( $reply_id );
 					if ( $show_reply_content ) $all_topic_data['replies'][$i]['content'] = bbp_get_reply_content( $reply_id );
 					$i++;
 				}
