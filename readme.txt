@@ -4,7 +4,7 @@ Donate link: http://casier.eu/wp-dev/
 Tags: bbpress,api,rest,rest api
 Requires at least: 4.7
 Tested up to: 4.8
-Stable tag: 1.0.13
+Stable tag: 1.0.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,6 +72,11 @@ Of course ! Just post something on the support tab
 Thanks. Please leave a review or donate 1 or 2 EUR/USD for a coffee.
 
 == Changelog ==
+= 1.0.14 =
+* Add reply_to to the replies as a first step in threading (https://github.com/ePascalC/bbp-API/issues/25)
+* Fix total_replies and next page empty (https://github.com/ePascalC/bbp-API/issues/22)
+* Add per_page in the JSON output (https://github.com/ePascalC/bbp-API/issues/23)
+
 = 1.0.13 =
 * Fixing https://github.com/ePascalC/bbp-API/issues/22
 
