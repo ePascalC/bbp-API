@@ -46,7 +46,9 @@ function bbp_api_topics() {
 			$all_topic_data['topics'][$i]['title'] = bbp_get_topic_title( $topic_id );
 			$all_topic_data['topics'][$i]['reply_count'] = bbp_get_topic_reply_count( $topic_id );
 			$all_topic_data['topics'][$i]['permalink'] = bbp_get_topic_permalink( $topic_id );
+			$all_topic_data['topics'][$i]['author_id'] = bbp_get_topic_author_id( $topic_id );
 			$all_topic_data['topics'][$i]['author_name'] = bbp_get_topic_author_display_name( $topic_id );
+			$all_topic_data['topics'][$i]['permalink'] = bbp_get_topic_permalink( $topic_id );
 			$all_topic_data['topics'][$i]['author_avatar'] = bbp_get_topic_author_avatar( $topic_id );
 			$all_topic_data['topics'][$i]['post_date'] = bbp_get_topic_post_date( $topic_id );
 			$all_topic_data['topics'][$i]['forum_id'] = bbp_get_topic_forum_id( $topic_id );
@@ -84,6 +86,7 @@ function bbp_api_topics_one( $data ) {
 		$all_topic_data['permalink'] = bbp_get_topic_permalink( $topic_id );
 		$all_topic_data['tags'] = bbp_get_topic_tag_list( $topic_id, array('before' => '') );
 		$all_topic_data['last_reply'] = bbp_get_topic_last_reply_id( $topic_id );
+		$all_topic_data['author_id'] = bbp_get_topic_author_id( $topic_id );
 		$all_topic_data['author_name'] = bbp_get_topic_author_display_name( $topic_id );
 		$all_topic_data['author_avatar'] = bbp_get_topic_author_avatar( $topic_id );
 		$all_topic_data['post_date'] = bbp_get_topic_post_date( $topic_id );

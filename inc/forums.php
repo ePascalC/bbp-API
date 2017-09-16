@@ -110,6 +110,7 @@ function bbp_api_forums_one( $data ) {
 				$all_forum_data['topics'][$i]['title'] = bbp_get_topic_title( $topic_id );
 				$all_forum_data['topics'][$i]['reply_count'] = bbp_get_topic_reply_count( $topic_id );
 				$all_forum_data['topics'][$i]['permalink'] = bbp_get_topic_permalink( $topic_id );
+				$all_forum_data['topics'][$i]['author_id'] = bbp_get_topic_author_id( $topic_id );
 				$all_forum_data['topics'][$i]['author_name'] = bbp_get_topic_author_display_name( $topic_id );
 				$all_forum_data['topics'][$i]['author_avatar'] = bbp_get_topic_author_avatar( $topic_id );
 				$all_forum_data['topics'][$i]['post_date'] = bbp_get_topic_post_date( $topic_id );
