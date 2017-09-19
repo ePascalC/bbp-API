@@ -42,7 +42,6 @@ function bbp_api_topics() {
 		}
 		while ( bbp_topics() ) : bbp_the_topic();
 			$topic_id = bbp_get_topic_id();
-			$date     = get_the_time( $topic_id );
 
 			$all_topic_data['topics'][ $i ]['id']                      = $topic_id;
 			$all_topic_data['topics'][ $i ]['date']                    = get_post_time( 'c', false, $topic_id, true );
