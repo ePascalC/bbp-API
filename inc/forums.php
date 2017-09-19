@@ -23,7 +23,7 @@ function bbp_api_forums() {
 			$all_forums_data[$i]['parent'] = bbp_get_forum_parent_id( $forum_id );
 			$all_forums_data[$i]['topic_count'] = bbp_get_forum_topic_count( $forum_id );
 			$all_forums_data[$i]['reply_count'] = bbp_get_forum_reply_count( $forum_id );
-			$all_forums_data[$i]['permalink'] = bbp_get_forum_permalink( $forum_id );
+			$all_forums_data[$i]['link'] = bbp_get_forum_permalink( $forum_id );
 			$all_forums_data[$i]['content'] = bbp_get_forum_content( $forum_id );
 			$all_forums_data[$i]['type'] = bbp_get_forum_type( $forum_id );
 			$i++;
@@ -57,7 +57,7 @@ function bbp_api_forums_one( $data ) {
 		$all_forum_data['parent'] = bbp_get_forum_parent_id( $forum_id );
 		$all_forum_data['topic_count'] = bbp_get_forum_topic_count( $forum_id );
 		$all_forum_data['reply_count'] = bbp_get_forum_reply_count( $forum_id );
-		$all_forum_data['permalink'] = bbp_get_forum_permalink( $forum_id );
+		$all_forum_data['link'] = bbp_get_forum_permalink( $forum_id );
 		$all_forum_data['content'] = bbp_get_forum_content( $forum_id );
 		$all_forum_data['type'] = bbp_get_forum_type( $forum_id );
 		$all_forum_data['subforums'] = array();
@@ -68,7 +68,7 @@ function bbp_api_forums_one( $data ) {
 			$all_forum_data['subforums'][$i]['title'] = bbp_get_forum_title( $subforum_id );
 			$all_forum_data['subforums'][$i]['topic_count'] = bbp_get_forum_topic_count( $subforum_id );
 			$all_forum_data['subforums'][$i]['reply_count'] = bbp_get_forum_reply_count( $subforum_id );
-			$all_forum_data['subforums'][$i]['permalink'] = bbp_get_forum_permalink( $subforum_id );
+			$all_forum_data['subforums'][$i]['link'] = bbp_get_forum_permalink( $subforum_id );
 			$all_forum_data['subforums'][$i]['content'] = bbp_get_forum_content( $subforum_id );
 			$all_forum_data['subforums'][$i]['type'] = bbp_get_forum_type( $subforum_id );
 			$i++;
@@ -109,7 +109,7 @@ function bbp_api_forums_one( $data ) {
 				$all_forum_data['topics'][$i]['id'] = $topic_id;
 				$all_forum_data['topics'][$i]['title'] = bbp_get_topic_title( $topic_id );
 				$all_forum_data['topics'][$i]['reply_count'] = bbp_get_topic_reply_count( $topic_id );
-				$all_forum_data['topics'][$i]['permalink'] = bbp_get_topic_permalink( $topic_id );
+				$all_forum_data['topics'][$i]['link'] = bbp_get_topic_permalink( $topic_id );
 				$all_forum_data['topics'][$i]['author_name'] = bbp_get_topic_author_display_name( $topic_id );
 				$all_forum_data['topics'][$i]['author_avatar'] = bbp_get_topic_author_avatar( $topic_id );
 				$all_forum_data['topics'][$i]['post_date'] = bbp_get_topic_post_date( $topic_id );

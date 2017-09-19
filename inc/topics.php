@@ -45,7 +45,7 @@ function bbp_api_topics() {
 			$all_topic_data['topics'][$i]['id'] = $topic_id;
 			$all_topic_data['topics'][$i]['title'] = bbp_get_topic_title( $topic_id );
 			$all_topic_data['topics'][$i]['reply_count'] = bbp_get_topic_reply_count( $topic_id );
-			$all_topic_data['topics'][$i]['permalink'] = bbp_get_topic_permalink( $topic_id );
+			$all_topic_data['topics'][$i]['link'] = bbp_get_topic_permalink( $topic_id );
 			$all_topic_data['topics'][$i]['author_name'] = bbp_get_topic_author_display_name( $topic_id );
 			$all_topic_data['topics'][$i]['author_avatar'] = bbp_get_topic_author_avatar( $topic_id );
 			$all_topic_data['topics'][$i]['post_date'] = bbp_get_topic_post_date( $topic_id );
@@ -81,7 +81,7 @@ function bbp_api_topics_one( $data ) {
 		$all_topic_data['id'] = $topic_id;
 		$all_topic_data['title'] = bbp_get_topic_title( $topic_id );
 		$all_topic_data['reply_count'] = bbp_get_topic_reply_count( $topic_id );
-		$all_topic_data['permalink'] = bbp_get_topic_permalink( $topic_id );
+		$all_topic_data['link'] = bbp_get_topic_permalink( $topic_id );
 		$all_topic_data['tags'] = bbp_get_topic_tag_list( $topic_id, array('before' => '') );
 		$all_topic_data['last_reply'] = bbp_get_topic_last_reply_id( $topic_id );
 		$all_topic_data['author_name'] = bbp_get_topic_author_display_name( $topic_id );
@@ -138,7 +138,7 @@ function bbp_api_topics_one( $data ) {
 					// The first reply is the topic itself, so this 'if' removes it
 					$all_topic_data['replies'][$i]['id'] = $reply_id;
 					$all_topic_data['replies'][$i]['title'] = bbp_get_reply_title( $reply_id );
-					$all_topic_data['replies'][$i]['permalink'] = bbp_get_reply_permalink( $reply_id );
+					$all_topic_data['replies'][$i]['link'] = bbp_get_reply_permalink( $reply_id );
 					$all_topic_data['replies'][$i]['author_name'] = bbp_get_reply_author_display_name( $reply_id );
 					$all_topic_data['replies'][$i]['author_avatar'] = bbp_get_reply_author_avatar( $reply_id );
 					$all_topic_data['replies'][$i]['post_date'] = bbp_get_reply_post_date( $reply_id );

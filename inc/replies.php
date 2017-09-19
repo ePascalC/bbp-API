@@ -23,7 +23,7 @@ function bbp_api_replies_one( $data ) {
 	} else {
 		$all_reply_data['id'] = $reply_id;
 		$all_reply_data['title'] = bbp_get_reply_title( $reply_id );
-		$all_reply_data['permalink'] = bbp_get_reply_permalink( $reply_id );
+		$all_reply_data['link'] = bbp_get_reply_permalink( $reply_id );
 		$all_reply_data['topic_id'] = bbp_get_reply_topic_id( $all_reply_data['id'] );
 		$all_reply_data['topic_title'] = bbp_get_topic_title( $all_reply_data['topic_id'] );
 		$all_reply_data['forum_id'] = bbp_get_topic_forum_id( $all_reply_data['topic_id'] );
