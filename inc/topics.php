@@ -183,6 +183,12 @@ function bbp_api_newtopic_post( $data ) {
 	$email = $data['email'];
 	$myuser = get_user_by( "email", $data['email'] );
 	$author_id = $myuser->ID;
+	
+	$anonymous_data = bbp_filter_anonymous_post_data();
+	$is_anonymous = bbp_allow_anonymous()
+		&& is_null($author_id)
+		&& !empty($anonymous_data['bbp_anonymous_name']);
+	
 	$new_topic_id = bbp_insert_topic(
 		array(
 			'post_parent'  => $forum_id,
@@ -194,6 +200,12 @@ function bbp_api_newtopic_post( $data ) {
 			'forum_id'     => $forum_id,
 		)
 	);
+	
+	if ($is_anonymous && !empty($new_topic_id)) {
+		$anonymous_data['bbp_anonymous_email'] = $email;
+
+		bbp_update_anonymous_post_author( $new_topic_id, $anonymous_data, bbp_get_topic_post_type() );
+	}
 	
 	$return['id'] = $new_topic_id;
 	$return['forum_id'] = $forum_id;
